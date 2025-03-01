@@ -12,21 +12,15 @@ import string
 import nltk
 from nltk.corpus import stopwords
 
-# Download stopwords
 nltk.download('stopwords')
 
-# Function for text cleaning
 def clean_text(text):
-    # Remove punctuation
     text = ''.join([char for char in text if char not in string.punctuation])
-    # Convert text to lowercase
     text = text.lower()
-    # Remove stopwords
     stop_words = set(stopwords.words('english'))
     text = ' '.join([word for word in text.split() if word not in stop_words])
     return text
 
-# Define sentiment-to-risk mapping function
 def map_sentiment_to_risk(sentiment_score):
     if sentiment_score == "5 stars":
         return "Low"
@@ -41,25 +35,19 @@ def map_sentiment_to_risk(sentiment_score):
     else:
         return "Unknown"
 
-# Load BERT sentiment analysis model
 sentiment_pipeline = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
-# Streamlit app interface
 st.title("Predictive Mental Health Risk Level")
 
-# Upload dataset
 dataset = st.file_uploader(r"C:\Users\Namitha\Desktop\Medical_Prediction\archive\mental_health_data.csv", type=["csv"])
 
 if dataset is not None:
     try:
-        # Load the dataset
         df = pd.read_csv(dataset)
 
-        # Show the first few rows of the dataset
         st.write("Dataset preview:")
         st.write(df.head())
 
-        # Input field for user text (or use text from the dataset)
         user_input = st.text_area("What's on your mind today? 💬")
 
         if st.button("Analyze"):
